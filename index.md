@@ -1,7 +1,3 @@
-Hello and welcome to this blog. Edit the `index.md` file to change this content. All pages on the blog, including this one, use [Markdown](https://guides.github.com/features/mastering-markdown/). You can include images:
+## To the Reader I Have Never Met
 
-![Image of fast.ai logo](images/logo.png)
-
-## This is a title
-
-And you can include links, like this [link to fast.ai](https://www.fast.ai). Posts will appear after this file. 
+These words were meant as soliloquy, yet they find their meaning in the pause of your gaze. If they bring you a fleeting comfort or a moment of reflection, it is a joy I never foresaw. If not, then let them pass like a meteor across the night sky, leaving behind only a silent trace.
