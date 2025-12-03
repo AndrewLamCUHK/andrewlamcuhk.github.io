@@ -36,7 +36,7 @@ titles_from_headings:
 
 # ==================== 新增的Giscus评论配置 ====================
 giscus:
-  enabled: true                    # 全局开关，设为false可关闭所有评论
+  enabled: true
   repo: "AndrewLamCUHK/andrewlamcuhk.github.io"
   repo-id: "R_kgDOQhN7vw"
   category: "General"
@@ -46,7 +46,7 @@ giscus:
   reactions-enabled: "1"
   emit-metadata: "0"
   input-position: "bottom"
-  theme: "preferred_color_scheme"
+  theme: "light"  # 改为固定亮色主题
   lang: "zh-CN"
 
 # ==================== 默认配置更新 ====================
