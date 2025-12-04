@@ -33,7 +33,7 @@ layout: default
 
   <script>
     // 基于用户名 + 仓库名 + 页面URL，保证每篇文章独立计数
-    const pageId = "AndrewLamCUHK.andrewlamcuhk.github.io" + "{{ page.url }}";
+    const pageId = "andrewlamcuhk.github.io" + "{{ page.url }}";
 
     fetch(`https://visitor-badge.laobi.icu/badge?page_id=${pageId}&format=svg`)
       .then(r => r.text())
@@ -52,7 +52,7 @@ layout: default
   </div>
 
   <script>
-    const siteId = "AndrewLamCUHK.andrewlamcuhk.github.io";
+    const siteId = "andrewlamcuhk.github.io";
     fetch(`https://visitor-badge.laobi.icu/badge?page_id=${siteId}&format=svg`)
       .then(r => r.text())
       .then(svg => {
