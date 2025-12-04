@@ -26,7 +26,45 @@ layout: default
     {% include navlinks.html %}
   </div>
 
-  
+    <!-- ===== 阅读量计数 ===== -->
+  <div style="margin: 2rem 0 1rem; font-size: 0.85rem; color: #666;">
+    本页阅读量：<span id="views">...</span>
+  </div>
+
+  <script>
+    // 基于用户名 + 仓库名 + 页面URL，保证每篇文章独立计数
+    const pageId = "AndrewLamCUHK.andrewlamcuhk.github.io" + "{{ page.url }}";
+
+    fetch(`https://visitor-badge.laobi.icu/badge?page_id=${pageId}&format=svg`)
+      .then(r => r.text())
+      .then(svg => {
+        const match = svg.match(/>(\d+)</);
+        document.getElementById("views").innerText = match ? match[1] : "0";
+      })
+      .catch(_ => {
+        document.getElementById("views").innerText = "0";
+      });
+  </script>
+  <!-- ===== 阅读量结束 ===== -->
+  <!-- ===== 全站访问计数 ===== -->
+  <div style="margin: 0 0 2rem; font-size: 0.85rem; color: #666;">
+    全站访问：<span id="site-views">...</span>
+  </div>
+
+  <script>
+    const siteId = "AndrewLamCUHK.andrewlamcuhk.github.io";
+    fetch(`https://visitor-badge.laobi.icu/badge?page_id=${siteId}&format=svg`)
+      .then(r => r.text())
+      .then(svg => {
+        const match = svg.match(/>(\d+)</);
+        document.getElementById("site-views").innerText = match ? match[1] : "0";
+      })
+      .catch(_ => {
+        document.getElementById("site-views").innerText = "0";
+      });
+  </script>
+<!-- ===== 全站访问结束 ===== -->
+
   <!-- ===== 在这里添加评论 ===== -->
   {% if site.giscus.enabled != false and page.comments != false %}
   <div class="post-comments">
