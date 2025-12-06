@@ -15,6 +15,30 @@ layout: default
       {%- if author -%}
         • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="p-author h-card" itemprop="name">{{ author }}</span></span>
       {%- endif -%}</p>
+       <!-- 字数统计和阅读时间 - 放在作者信息下方 -->
+      {% assign words = page.content | strip_html | number_of_words %}
+      {% assign chinese_chars = page.content | strip_html | scan: /[\u4e00-\u9fa5]/ | size %}
+      {% assign total_words = words | plus: chinese_chars %}
+      {% assign reading_time = total_words | divided_by: 300 | at_least: 1 %}
+      
+      <div style="
+          margin: 0.75rem 0;
+          padding: 0.5rem 0.75rem;
+          background: #f8f9fa;
+          border-radius: 6px;
+          font-size: 13px;
+          color: #666;
+          line-height: 1.5;
+          display: inline-block;
+          border: 1px solid #e9ecef;
+      ">
+          <span style="margin-right: 1rem;">
+            📝 <strong>{{ total_words }}</strong> 字
+          </span>
+          <span>
+            ⏱️ <strong>{{ reading_time }}</strong> 分钟阅读
+          </span>
+      </div>
   </header>
 
   <div class="share-links">
