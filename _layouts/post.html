@@ -19,7 +19,7 @@ layout: default
       {% assign words = page.content | strip_html | number_of_words %}
       {% assign chinese_chars = page.content | strip_html | scan: /[\u4e00-\u9fa5]/ | size %}
       {% assign total_words = words | plus: chinese_chars %}
-      {% assign reading_time = total_words | divided_by: 300 | at_least: 1 %}
+      {% assign reading_time = total_words | divided_by: 200 | at_least: 1 %}
       
       <div style="
           margin: 0.75rem 0;
