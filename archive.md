@@ -23,7 +23,7 @@ title: Blog Archive
 
 <h3>小计</h3>
 <ul>
-  <li><发表了: {{ total_posts }} 篇文章</li>
+  <li>发表了: {{ total_posts }} 篇文章</li>
   <li>总字数: {{ total_words }} 字</li>
   <li>平均每篇: {{ total_words | divided_by: total_posts }} 字</li>
 </ul>
