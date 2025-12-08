@@ -1,3 +1,18 @@
 愿为五陵轻薄儿，生在贞观开元时。
 
 斗鸡走犬过一生，天地安危两不知。
+
+
+<section class="featured-posts">
+  <h2>Featured posts</h2>
+  <ul>
+    {% for post in site.posts %}
+      {% if post.featured %}
+        <li>
+          <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+          <span class="post-date">{{ post.date | date: "%Y-%m-%d" }}</span>
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</section>
