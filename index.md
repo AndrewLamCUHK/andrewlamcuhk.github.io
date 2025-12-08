@@ -5,7 +5,7 @@
 
 {% assign featured_posts = site.posts | where: "featured", true | sort: "date" %}
 <section class="featured-posts">
-  <h2>精选文章</h2>
+  <h2>Featured posts</h2>
   <ul>
     {% for post in featured_posts %}
       <li>
