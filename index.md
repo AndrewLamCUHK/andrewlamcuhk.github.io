@@ -6,6 +6,7 @@
 <section class="featured-posts">
   <h2>Featured posts</h2>
   <ul>
+    {% assign featured_posts = site.posts | where: "featured", true | sort: "date" %}
     {% for post in site.posts %}
       {% if post.featured %}
         <li>
