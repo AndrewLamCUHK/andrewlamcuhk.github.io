@@ -58,52 +58,62 @@ permalink: /photos/
 Scroll horizontally within each collection. Click a thumbnail to open the original image file.
 </p>
 
-{% comment %}
-assets/photos/nature/
-{% endcomment %}
-
-{% assign collections = "" | split: "|" %}
-{% assign collections = collections | push: "street::Street::Tokyo / candid" %}
-{% assign collections = collections | push: "night::Night::Neon / low light" %}
-{% assign collections = collections | push: "architecture::Architecture::Lines / geometry" %}
+{% assign base = "/assets/photos/" %}
 
 {% assign all = site.static_files
-  | where_exp: "f", "f.path contains '/assets/photos/'"
+  | where_exp: "f", "f.path contains base"
 %}
 
-{% for c in collections %}
-  {% assign parts = c | split: "::" %}
-  {% assign folder = parts[0] %}
-  {% assign title = parts[1] %}
-  {% assign note  = parts[2] %}
+{%- comment -%}
+收集分类名：从 /assets/photos/<folder>/xxx.jpg 中提取 <folder>
+{%- endcomment -%}
+{% assign folders = "" | split: "|" %}
+{% for f in all %}
+  {% assign ext = f.extname | downcase %}
+  {% if ext == ".jpg" or ext == ".jpeg" or ext == ".png" or ext == ".webp" or ext == ".gif" %}
+    {% assign p = f.path | remove_first: base %}
+    {% assign parts = p | split: "/" %}
+    {% assign folder = parts[0] %}
+    {% if folder != "" %}
+      {% unless folders contains folder %}
+        {% assign folders = folders | push: folder %}
+      {% endunless %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
 
-  {% assign prefix = "/assets/photos/" | append: folder | append: "/" %}
+{% assign folders = folders | sort %}
+
+{% if folders.size == 0 %}
+  <p style="opacity:.65;">
+    No images found under <code>{{ base }}</code>. Create a folder like
+    <code>/assets/photos/nature/</code> and upload JPG/PNG/WEBP images.
+  </p>
+{% endif %}
+
+{% for folder in folders %}
+  {% assign prefix = base | append: folder | append: "/" %}
   {% assign items = all | where_exp: "f", "f.path contains prefix" | sort: "name" %}
 
   <section class="collection">
-    <h2>{{ title }}</h2>
-    {% if note and note != "" %}<p class="note">{{ note }}</p>{% endif %}
+    <h2>{{ folder | replace: "-", " " | capitalize }}</h2>
+    <p class="note"><code>{{ prefix }}</code></p>
 
-    {% assign rendered = 0 %}
-    <div class="rail" aria-label="{{ title }} collection">
+    <div class="rail" aria-label="{{ folder }} collection">
       {% for f in items %}
         {% assign ext = f.extname | downcase %}
         {% if ext == ".jpg" or ext == ".jpeg" or ext == ".png" or ext == ".webp" or ext == ".gif" %}
-          {% assign base = f.name | split: "." | first %}
+          {% assign base_name = f.name | split: "." | first %}
           <a class="card" href="{{ f.path | relative_url }}" target="_blank" rel="noopener">
-            <img src="{{ f.path | relative_url }}" alt="{{ base | escape }}" loading="lazy">
+            <img src="{{ f.path | relative_url }}" alt="{{ base_name | escape }}" loading="lazy">
             <div class="meta">
-              <div class="title">{{ base }}</div>
+              <div class="title">{{ base_name }}</div>
               <div class="sub">{{ folder }}</div>
             </div>
           </a>
-          {% assign rendered = rendered | plus: 1 %}
         {% endif %}
       {% endfor %}
     </div>
-
-    {% if rendered == 0 %}
-      <p style="opacity:.65;">No images yet. Upload files to <code>{{ prefix }}</code>.</p>
-    {% endif %}
   </section>
 {% endfor %}
+
