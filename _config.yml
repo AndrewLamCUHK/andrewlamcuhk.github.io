@@ -40,3 +40,8 @@ defaults:
       type: post
     values:
       tags: Other
+
+header_pages:
+  - index.md
+  - about.md
+  - photos.html
