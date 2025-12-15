@@ -101,7 +101,7 @@ Scroll horizontally within each collection. Click a thumbnail to open the origin
           缩略图路径：/assets/photos/_thumb/<folder>/<same-name>.jpg
           若不存在，则 onerror 回退到原图
           {%- endcomment -%}
-          {% assign rel = f.path | remove_first: base %}  {# e.g. nature/IMG_0001.JPG #}
+          {% assign rel = f.path | remove_first: base %} 
           {% assign thumb = "/assets/photos/_thumb/" | append: rel %}
           {% assign thumb = thumb | replace: ".JPG", ".jpg" | replace: ".JPEG", ".jpg" | replace: ".PNG", ".jpg" | replace: ".WEBP", ".jpg" | replace: ".GIF", ".jpg" %}
 
