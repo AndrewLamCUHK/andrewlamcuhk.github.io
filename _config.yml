@@ -42,6 +42,6 @@ defaults:
       tags: Other
 
 header_pages:
-  - index.md
+  - archive.md
   - about.md
   - photos.html
