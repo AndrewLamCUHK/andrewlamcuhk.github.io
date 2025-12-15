@@ -59,8 +59,7 @@ Scroll horizontally within each collection. Click a thumbnail to open the origin
 </p>
 
 {% comment %}
-- folder: assets/photos/nature/
-- title: 自然风光
+assets/photos/nature/
 {% endcomment %}
 
 {% assign collections = "" | split: "|" %}
@@ -70,7 +69,6 @@ Scroll horizontally within each collection. Click a thumbnail to open the origin
 
 {% assign all = site.static_files
   | where_exp: "f", "f.path contains '/assets/photos/'"
-  | where_exp: "f", "f.extname == '.jpg' or f.extname == '.jpeg' or f.extname == '.png' or f.extname == '.webp' or f.extname == '.gif'"
 %}
 
 {% for c in collections %}
@@ -86,11 +84,11 @@ Scroll horizontally within each collection. Click a thumbnail to open the origin
     <h2>{{ title }}</h2>
     {% if note and note != "" %}<p class="note">{{ note }}</p>{% endif %}
 
-    {% if items.size == 0 %}
-      <p style="opacity:.65;">No images yet. Upload files to <code>{{ prefix }}</code>.</p>
-    {% else %}
-      <div class="rail" aria-label="{{ title }} collection">
-        {% for f in items %}
+    {% assign rendered = 0 %}
+    <div class="rail" aria-label="{{ title }} collection">
+      {% for f in items %}
+        {% assign ext = f.extname | downcase %}
+        {% if ext == ".jpg" or ext == ".jpeg" or ext == ".png" or ext == ".webp" or ext == ".gif" %}
           {% assign base = f.name | split: "." | first %}
           <a class="card" href="{{ f.path | relative_url }}" target="_blank" rel="noopener">
             <img src="{{ f.path | relative_url }}" alt="{{ base | escape }}" loading="lazy">
@@ -99,8 +97,13 @@ Scroll horizontally within each collection. Click a thumbnail to open the origin
               <div class="sub">{{ folder }}</div>
             </div>
           </a>
-        {% endfor %}
-      </div>
+          {% assign rendered = rendered | plus: 1 %}
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    {% if rendered == 0 %}
+      <p style="opacity:.65;">No images yet. Upload files to <code>{{ prefix }}</code>.</p>
     {% endif %}
   </section>
 {% endfor %}
