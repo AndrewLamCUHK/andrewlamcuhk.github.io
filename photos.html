@@ -1,0 +1,106 @@
+---
+layout: page
+title: Photos
+permalink: /photos/
+---
+
+<style>
+.collection { margin: 1.25rem 0 2.2rem; }
+.collection h2 { margin: 0 0 .35rem; font-size: 1.25rem; }
+.collection .note { margin: 0 0 .8rem; opacity: .7; }
+
+.rail{
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(150px, 190px);
+  gap: 12px;
+
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+
+  padding: 10px 6px 14px;
+  border: 1px solid rgba(0,0,0,.10);
+  border-radius: 14px;
+  background: rgba(0,0,0,.02);
+}
+.rail::-webkit-scrollbar{ height: 10px; }
+.rail::-webkit-scrollbar-thumb{ background: rgba(0,0,0,.18); border-radius: 999px; }
+.rail::-webkit-scrollbar-track{ background: transparent; }
+
+.card{
+  scroll-snap-align: start;
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,.10);
+  background: #fff;
+}
+.card img{
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+}
+.meta{ padding: 8px 10px 10px; }
+.title{ font-weight: 600; font-size: .95rem; line-height: 1.25; }
+.sub{ opacity: .7; font-size: .85rem; margin-top: 2px; }
+
+@media (max-width: 520px){
+  .rail{ grid-auto-columns: minmax(160px, 75vw); }
+}
+</style>
+
+<p style="opacity:.75; margin-top:0;">
+Scroll horizontally within each collection. Click a thumbnail to open the original image file.
+</p>
+
+{% comment %}
+- folder: assets/photos/nature/
+- title: 自然风光
+{% endcomment %}
+
+{% assign collections = "" | split: "|" %}
+{% assign collections = collections | push: "street::Street::Tokyo / candid" %}
+{% assign collections = collections | push: "night::Night::Neon / low light" %}
+{% assign collections = collections | push: "architecture::Architecture::Lines / geometry" %}
+
+{% assign all = site.static_files
+  | where_exp: "f", "f.path contains '/assets/photos/'"
+  | where_exp: "f", "f.extname == '.jpg' or f.extname == '.jpeg' or f.extname == '.png' or f.extname == '.webp' or f.extname == '.gif'"
+%}
+
+{% for c in collections %}
+  {% assign parts = c | split: "::" %}
+  {% assign folder = parts[0] %}
+  {% assign title = parts[1] %}
+  {% assign note  = parts[2] %}
+
+  {% assign prefix = "/assets/photos/" | append: folder | append: "/" %}
+  {% assign items = all | where_exp: "f", "f.path contains prefix" | sort: "name" %}
+
+  <section class="collection">
+    <h2>{{ title }}</h2>
+    {% if note and note != "" %}<p class="note">{{ note }}</p>{% endif %}
+
+    {% if items.size == 0 %}
+      <p style="opacity:.65;">No images yet. Upload files to <code>{{ prefix }}</code>.</p>
+    {% else %}
+      <div class="rail" aria-label="{{ title }} collection">
+        {% for f in items %}
+          {% assign base = f.name | split: "." | first %}
+          <a class="card" href="{{ f.path | relative_url }}" target="_blank" rel="noopener">
+            <img src="{{ f.path | relative_url }}" alt="{{ base | escape }}" loading="lazy">
+            <div class="meta">
+              <div class="title">{{ base }}</div>
+              <div class="sub">{{ folder }}</div>
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </section>
+{% endfor %}
