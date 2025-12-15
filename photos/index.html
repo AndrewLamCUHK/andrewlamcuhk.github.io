@@ -1,0 +1,95 @@
+---
+layout: default
+title: Photos
+permalink: /photos/
+---
+
+<link rel="stylesheet" href="/assets/css/photos.css">
+
+<!-- baguetteBox (纯 JS 灯箱，MIT) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/0.4.0/baguetteBox.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/0.4.0/baguetteBox.min.js"></script>
+
+<section class="photo-page">
+  <header class="photo-header">
+    <h1>Photos</h1>
+    <p class="photo-subtitle">Selected works.</p>
+  </header>
+
+  <!-- 标签筛选（可选） -->
+  <div class="photo-filters" id="photoFilters"></div>
+
+  <div class="photo-grid baguetteBoxOne" id="photoGrid">
+    {% assign items = site.photos | sort: "date" | reverse %}
+    {% for p in items %}
+      <a class="photo-card"
+         href="{{ p.image_full | relative_url }}"
+         data-caption="{{ p.title }}{% if p.location %} · {{ p.location }}{% endif %}">
+        <img
+          src="{{ p.image_thumb | relative_url }}"
+          loading="lazy"
+          alt="{{ p.alt | escape }}"
+        >
+        <div class="photo-meta">
+          <div class="photo-title">{{ p.title }}</div>
+          <div class="photo-sub">
+            {% if p.location %}{{ p.location }}{% endif %}
+            {% if p.location and p.date %} · {% endif %}
+            {% if p.date %}{{ p.date | date: "%Y-%m-%d" }}{% endif %}
+          </div>
+          <div class="photo-tags" data-tags="{{ p.tags | join: ',' | escape }}">
+            {% for t in p.tags %}
+              <span class="tag">#{{ t }}</span>
+            {% endfor %}
+          </div>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // 初始化灯箱
+  if (window.baguetteBox) baguetteBox.run('.baguetteBoxOne');
+
+  // 标签筛选（纯前端，不影响构建）
+  const cards = Array.from(document.querySelectorAll('.photo-card'));
+  const tags = new Set();
+  cards.forEach(c => {
+    const tagLine = c.querySelector('.photo-tags')?.dataset.tags || '';
+    tagLine.split(',').map(s => s.trim()).filter(Boolean).forEach(t => tags.add(t));
+  });
+
+  const filters = document.getElementById('photoFilters');
+  if (!filters || tags.size === 0) return;
+
+  const allBtn = document.createElement('button');
+  allBtn.textContent = 'All';
+  allBtn.className = 'filter-btn active';
+  allBtn.dataset.tag = '';
+  filters.appendChild(allBtn);
+
+  [...tags].sort().forEach(t => {
+    const btn = document.createElement('button');
+    btn.textContent = '#' + t;
+    btn.className = 'filter-btn';
+    btn.dataset.tag = t;
+    filters.appendChild(btn);
+  });
+
+  filters.addEventListener('click', (e) => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    filters.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const target = btn.dataset.tag;
+    cards.forEach(c => {
+      const tagLine = c.querySelector('.photo-tags')?.dataset.tags || '';
+      const has = !target || tagLine.split(',').map(s => s.trim()).includes(target);
+      c.style.display = has ? '' : 'none';
+    });
+  });
+});
+</script>
