@@ -44,4 +44,3 @@ defaults:
 header_pages:
   - archive.md
   - about.md
-  - photos.html
