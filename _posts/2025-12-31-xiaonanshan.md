@@ -3,7 +3,6 @@ layout: post
 title: "小南山游记"
 date: 2025-12-31
 tags: 游记
-featured: true
 ---
 
 
