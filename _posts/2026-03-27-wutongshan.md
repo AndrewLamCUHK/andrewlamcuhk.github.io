@@ -2,7 +2,7 @@
 layout: post
 title: "再游梧桐山-胶片小记"
 date: 2026-03-27
-tags: 游记
+tags: 摄影
 ---
 
 
