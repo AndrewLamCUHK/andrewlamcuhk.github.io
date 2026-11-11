@@ -1,56 +1,117 @@
+
 ---
 layout: default
 ---
-<link href="/css/override.css" rel="stylesheet" type="text/css">
+
+<link href="{{ '/css/override.css' | relative_url }}" rel="stylesheet" type="text/css">
+
+<!-- ===== MathJax 数学公式支持 ===== -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true,
+      tags: 'ams'
+    },
+    options: {
+      skipHtmlTags: [
+        'script', 'noscript', 'style',
+        'textarea', 'pre', 'code'
+      ]
+    },
+    chtml: {
+      scale: 1.0,
+      matchFontHeight: false
+    },
+    startup: {
+      typeset: true
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+<!-- ===== MathJax 配置结束 ===== -->
+
+
 <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">{{ page.title | escape }}</h1>
+
+    <h1 class="post-title p-name" itemprop="name headline">
+      {{ page.title | escape }}
+    </h1>
+
     <p class="post-meta">
-      <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
+      <time class="dt-published"
+            datetime="{{ page.date | date_to_xmlschema }}"
+            itemprop="datePublished">
         {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
         {{ page.date | date: date_format }}
       </time>
+
       {% assign author = page.author | default: site.author %}
       {%- if author -%}
-        • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="p-author h-card" itemprop="name">{{ author }}</span></span>
-      {%- endif -%}</p>
-       <!-- 字数统计和阅读时间 - 放在作者信息下方 -->
-      {% assign words = page.content | strip_html | number_of_words %}
-      {% assign chinese_chars = page.content | strip_html | scan: /[\u4e00-\u9fa5]/ | size %}
-      {% assign total_words = words | plus: chinese_chars %}
-      {% assign reading_time = total_words | divided_by: 200 | at_least: 1 %}
-      
-      <div style="
-          margin: 0.75rem 0;
-          padding: 0.5rem 0.75rem;
-          background: #f8f9fa;
-          border-radius: 6px;
-          font-size: 13px;
-          color: #666;
-          line-height: 1.5;
-          display: inline-block;
-          border: 1px solid #e9ecef;
-      ">
-          <span style="margin-right: 1rem;">
-            📝 <strong>{{ total_words }}</strong> 字
+        •
+        <span itemprop="author"
+              itemscope
+              itemtype="http://schema.org/Person">
+          <span class="p-author h-card" itemprop="name">
+            {{ author }}
           </span>
-          <span>
-            ⏱️ <strong>{{ reading_time }}</strong> 分钟阅读
-          </span>
-      </div>
+        </span>
+      {%- endif -%}
+    </p>
+
+    <!-- 字数统计和阅读时间 -->
+    {% assign words = page.content | strip_html | number_of_words %}
+    {% assign chinese_chars = page.content | strip_html | scan: /[\u4e00-\u9fa5]/ | size %}
+    {% assign total_words = words | plus: chinese_chars %}
+    {% assign reading_time = total_words | divided_by: 200 | at_least: 1 %}
+
+    <div style="
+        margin: 0.75rem 0;
+        padding: 0.5rem 0.75rem;
+        background: #f8f9fa;
+        border-radius: 6px;
+        font-size: 13px;
+        color: #666;
+        line-height: 1.5;
+        display: inline-block;
+        border: 1px solid #e9ecef;
+    ">
+      <span style="margin-right: 1rem;">
+        📝 <strong>{{ total_words }}</strong> 字
+      </span>
+      <span>
+        ⏱️ <strong>{{ reading_time }}</strong> 分钟阅读
+      </span>
+    </div>
+
   </header>
 
+
+  <!-- 分享链接 -->
   <div class="share-links">
     {% include sharelinks.html %}
   </div>
 
+
+  <!-- 文章正文 -->
   <div class="post-content e-content" itemprop="articleBody">
+
     {{ content }}
+
     {% include navlinks.html %}
+
   </div>
 
 
+  <!-- 访问量统计 -->
   <div style="font-size:0.9em; color:#666; margin-top:1.5rem;">
     本页阅读量：
     <span id="busuanzi_value_page_pv">0</span>
@@ -60,15 +121,17 @@ layout: default
   </div>
 
 
-
-
-
-  <!-- ===== 在这里添加评论 ===== -->
+  <!-- ===== 评论区 ===== -->
   {% if site.giscus.enabled != false and page.comments != false %}
+
   <div class="post-comments">
+
     <h3>💬 评论与讨论</h3>
-    <p class="comment-notice">欢迎留下你的想法！评论基于 GitHub Discussions，需有 GitHub 账号。</p>
-    
+
+    <p class="comment-notice">
+      欢迎留下你的想法！评论基于 GitHub Discussions，需有 GitHub 账号。
+    </p>
+
     <script src="https://giscus.app/client.js"
             data-repo="AndrewLamCUHK/andrewlamcuhk.github.io"
             data-repo-id="R_kgDOQhN7vw"
@@ -84,13 +147,26 @@ layout: default
             crossorigin="anonymous"
             async>
     </script>
-    
-    <noscript>
-      <p>评论功能需要 JavaScript 支持。或者你可以直接访问 <a href="https://github.com/AndrewLamCUHK/andrewlamcuhk.github.io/discussions">GitHub Discussions</a>。</p>
-    </noscript>
-  </div>
-  {% endif %}
-  <!-- ===== 评论结束 ===== -->
 
-  <a class="u-url" href="{{ page.url | relative_url }}" hidden></a>
+    <noscript>
+      <p>
+        评论功能需要 JavaScript 支持。
+        或者你可以直接访问
+        <a href="https://github.com/AndrewLamCUHK/andrewlamcuhk.github.io/discussions">
+          GitHub Discussions
+        </a>。
+      </p>
+    </noscript>
+
+  </div>
+
+  {% endif %}
+  <!-- ===== 评论区结束 ===== -->
+
+
+  <a class="u-url"
+     href="{{ page.url | relative_url }}"
+     hidden>
+  </a>
+
 </article>
